@@ -1,0 +1,74 @@
+import React, { useState, useRef } from 'react';
+import axios from 'axios';
+import './App.css';
+
+function App() {
+  const [file, setFile] = useState(null);
+  const canvasRef = useRef(null);
+  const [isDrawing, setIsDrawing] = useState(false);
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]);
+  };
+
+  const handleUpload = async () => {
+    const formData = new FormData();
+    formData.append('document', file);
+
+    try {
+      const response = await axios.post('/upload', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      alert('File uploaded successfully');
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+  };
+
+  const startDrawing = ({ nativeEvent }) => {
+    const { offsetX, offsetY } = nativeEvent;
+    const context = canvasRef.current.getContext('2d');
+    context.beginPath();
+    context.moveTo(offsetX, offsetY);
+    setIsDrawing(true);
+  };
+
+  const finishDrawing = () => {
+    const context = canvasRef.current.getContext('2d');
+    context.closePath();
+    setIsDrawing(false);
+  };
+
+  const draw = ({ nativeEvent }) => {
+    if (!isDrawing) return;
+    const { offsetX, offsetY } = nativeEvent;
+    const context = canvasRef.current.getContext('2d');
+    context.lineTo(offsetX, offsetY);
+    context.stroke();
+  };
+
+  const clearCanvas = () => {
+    const context = canvasRef.current.getContext('2d');
+    context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+  };
+
+  return (
+    <div className="App">
+      <h1>E-Signature</h1>
+      <input type="file" onChange={handleFileChange} />
+      <button onClick={handleUpload}>Upload Document</button>
+      <canvas
+        ref={canvasRef}
+        width="400"
+        height="200"
+        onMouseDown={startDrawing}
+        onMouseUp={finishDrawing}
+        onMouseMove={draw}
+        className="signature-pad"
+      ></canvas>
+      <button onClick={clearCanvas}>Clear Signature</button>
+    </div>
+  );
+}

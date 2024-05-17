@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Signing Website</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Our E-Signing Platform</h1>
+    </header>
+    <main>
+        <section id="esign">
+            <h2>E-Sign Your Document</h2>
+            <form id="esign-form">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+                
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                
+                <label for="signature">Signature:</label>
+                <div>
+                    <canvas id="signature-pad" width="400" height="200"></canvas>
+                    <button type="button" id="clear-button">Clear</button>
+                </div>
+                
+                <button type="submit">Submit</button>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>Co-Founder: Raghuram Gundi, IIT Bombay Student</p>
+        <p>Co-Founder: Shubham Kumar, IIT Bombay Student</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
